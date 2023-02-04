@@ -1,24 +1,92 @@
 import { useRoute } from "@react-navigation/native";
-import {ScrollView, View, Text} from "react-native";
+import {ScrollView, View, Text, Alert} from "react-native";
 import { BackButton } from "../components/BackButton";
 import dayjs from "dayjs";
 import { ProgressBar } from "../components/ProgressBar";
 import { Checkbox } from "../components/Checkbox";
+import { useEffect, useState } from "react";
+import { Loading } from "../components/Loading";
+import { api } from "../lib/axios";
+import { generateProgressPercentege } from "../utils/generate-progress-percentage";
+import { HabitsEmpty } from "../components/HabitsEmpty";
+import clsx from "clsx";
 
 interface Params {
     date: string;
 }
 
+interface HabitsInfo {
+    possibleHabits: Array<{
+        id: string
+        title: string
+        created_at: string
+    }>,
+    completedHabits: string[]
+}
+
 export function Habit() {
+    const [loading, setLoading] = useState(true)
+    const [habitsInfo, setHabitsInfo] = useState<HabitsInfo>()
+
     const route = useRoute();
     const {date} = route.params as Params;
 
     const parseDate = dayjs(date);
     const dayOfWeek = parseDate.format("dddd");
     const dayAndMonth = parseDate.format("DD/MM");
+    const isDateInPast = parseDate.endOf("day").isBefore(new Date())
+
+    const habitsProgress = habitsInfo?.possibleHabits.length 
+        ? generateProgressPercentege(habitsInfo.possibleHabits.length, habitsInfo.completedHabits.length) 
+        : 0
+
+    async function fetchHabits() {
+        try {
+            setLoading(true)
+            
+            const response = await api.get("/day", {
+                params: { date }
+            })
+
+            setHabitsInfo(response.data)
+
+        } catch (error) {
+            console.log(error)
+            Alert.alert("Ops", "Não foi possível carregar as informações dos hábitos!")
+        } finally {
+            setLoading(false)
+        }
+    }
+
+    async function handleToggleHabit(habitId: string) {
+        let completedHabits: string[] = []
+        try {
+            await api.patch(`/habits/${habitId}/toggle`)
+
+            if(habitsInfo?.completedHabits.includes(habitId)) {
+                completedHabits = habitsInfo?.completedHabits.filter(habit => habit !== habitId)
+                setHabitsInfo({ possibleHabits: habitsInfo.possibleHabits, completedHabits})
+
+            } else {
+                completedHabits = [...habitsInfo!.completedHabits, habitId]
+                setHabitsInfo({ possibleHabits: habitsInfo!.possibleHabits, completedHabits})
+            }
+        } catch (error) {
+            console.log(error)
+            Alert.alert("Ops", "Não foi possível atualizar o status do hábito!")
+        }
+    }
+
+    useEffect(() => {
+        fetchHabits()
+    }, [])
+
+    if(loading) {
+        return <Loading />
+    }
 
     return (
-        <View className="flex-1 bg-background px-8 pt-6">
+        <View className="flex-1 bg-background px-8 pt-12">
             <ScrollView
                 showsVerticalScrollIndicator={false} 
                 contentContainerStyle={{paddingBottom: 100}}
@@ -33,17 +101,30 @@ export function Habit() {
                     {dayAndMonth}
                 </Text>
 
-                <ProgressBar progress={50} />
+                <ProgressBar progress={habitsProgress} />
 
-                <View className="mt-6" >
-                    <Checkbox
-                        title="Beber 2L de água"
-                        checked
-                    />
-                    <Checkbox
-                        title="Mercado"
-                    />
+                <View className={clsx("mt-6", {
+                    ["opacity-50"]: isDateInPast
+                })} >
+                    {habitsInfo?.possibleHabits && habitsInfo?.possibleHabits.length > 0 ? habitsInfo.possibleHabits.map(habit => (
+                        <Checkbox
+                            key={habit.id}
+                            title={habit.title}
+                            checked={habitsInfo.completedHabits.includes(habit.id)}
+                            disabled={isDateInPast}
+                            onPress={() => handleToggleHabit(habit.id)}
+                        />
+                    )) : (
+                        <HabitsEmpty />
+                    )}
                 </View>
+
+                {isDateInPast && (
+                    <Text className="text-white mt-10 text-center" >
+                        Você não pode editar hábitos antigos.
+
+                    </Text>
+                )}
             </ScrollView>
         </View>
     )

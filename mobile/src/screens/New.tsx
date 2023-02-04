@@ -31,9 +31,9 @@ export function New() {
     async function handleCreateNewHabit() {
         try {
             if(!title.trim()) {
-                Alert.alert("Novo hábito", "Informe o nome do hábito")
+                return Alert.alert("Novo hábito", "Informe o nome do hábito")
             } else if(weekDays.length === 0) {
-                Alert.alert("Novo hábito", "Escolha a peridicidade")
+                return Alert.alert("Novo hábito", "Escolha a peridicidade")
             }
 
             await api.post("/habits", {
@@ -52,9 +52,8 @@ export function New() {
     }
 
     return (
-        <View className="flex-1 bg-background px-8 pt-6">
+        <View className="flex-1 bg-background px-8 pt-12">
             <ScrollView 
-                className="mt-6"
                 showsVerticalScrollIndicator={false} 
                 contentContainerStyle={{paddingBottom: 100}}
             >

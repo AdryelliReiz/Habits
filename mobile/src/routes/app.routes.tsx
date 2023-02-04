@@ -22,6 +22,6 @@ export function AppRoutes() {
                 component={Habit} 
             />
             
-    </Navigator>
+        </Navigator>
     )
 }
