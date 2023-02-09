@@ -35,11 +35,12 @@ export function NewHabitForm() {
     async function createNewHabit(event: FormEvent) {
         event.preventDefault()
 
-
         try {
             if(!title || weekDays.length === 0) {
                 return
             }
+
+            console.log(token)
     
             if(token !== "") {
                 return
