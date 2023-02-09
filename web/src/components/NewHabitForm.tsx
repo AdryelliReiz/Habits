@@ -3,6 +3,7 @@ import * as Checkbox from "@radix-ui/react-checkbox";
 import { FormEvent, useContext, useState } from "react";
 import { api } from "../lib/axios";
 import { AuthenticateTokenContext } from "../contexts/AuthenticateTokenContext";
+import { SummaryContext } from "../contexts/SummaryContext";
 
 const availableWeekDays = [
     "Domingo",
@@ -19,6 +20,7 @@ export function NewHabitForm() {
     const [weekDays, setWeekDays] = useState<Number[]>([])
 
     const {token} = useContext(AuthenticateTokenContext)
+    const {handleUpdateSummary} = useContext(SummaryContext)
 
     function handleToggleWeekDay(weekDay: Number) {
         if(weekDays.includes(weekDay)) {
@@ -58,6 +60,8 @@ export function NewHabitForm() {
     
             setTitle("")
             setWeekDays([])
+
+            handleUpdateSummary()
     
             alert("Hábito criado com sucesso!")
         } catch (error) {

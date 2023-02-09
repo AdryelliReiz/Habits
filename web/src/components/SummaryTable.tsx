@@ -1,6 +1,7 @@
 import dayjs from "dayjs";
 import { useContext, useEffect, useState } from "react";
 import { AuthenticateTokenContext } from "../contexts/AuthenticateTokenContext";
+import { SummaryContext } from "../contexts/SummaryContext";
 import { api } from "../lib/axios";
 import { generateDatesFromYearBeginning } from "../utils/generate-dates-from-year-beginning.ts"
 import { HabitDay } from "./HabitDay"
@@ -12,31 +13,8 @@ const summaryDates = generateDatesFromYearBeginning();
 const minimumSummaryDatesSize = 18 * 7
 const amountOfDaysToFill = minimumSummaryDatesSize - summaryDates.length;
 
-type Summary = Array<{
-    id: string
-    date: string
-    amount: number
-    completed: number
-}>
-
 export function SummaryTable() {
-    const [summary, setSummary] = useState<Summary>([])
-
-    const {token} = useContext(AuthenticateTokenContext)
-
-    useEffect(() => {
-        if(token !== "") {
-            console.log(token)
-            api.get("/summary", {
-                headers: {
-                    "Authorization": `Basic ${token}`
-                }
-            }).then(response => {
-                console.log(response.data)
-                setSummary(response.data)
-            })
-        }
-    }, [token])
+    const {summary} = useContext(SummaryContext)
     
     return (
         <div className="w-full flex">
