@@ -1,7 +1,6 @@
 import { User } from "@prisma/client"
 import dayjs from "dayjs"
 import { FastifyInstance, FastifyReply, FastifyRequest } from "fastify"
-import { request } from "http"
 import {z} from "zod"
 import {prisma} from "./lib/prisma"
 
@@ -34,8 +33,6 @@ export async function appRoutes(app: FastifyInstance) {
         const {title, weekDays} = createHabitBody.parse(request.body)
 
         const today = dayjs().startOf("day").toDate()
-
-        console.log(request.user)
 
         await prisma.habit.create({
             data: {
@@ -94,11 +91,10 @@ export async function appRoutes(app: FastifyInstance) {
         })
 
         const completedHabits = day?.dayHabits.map(dayHabit => {
-            for(var habits of possibleHabits) {
-                if(habits.id === dayHabit.habit_id) {
-                    return dayHabit.habit_id
+            for(var habit of possibleHabits) {
+                if(habit.id == dayHabit.habit_id) {
+                   return dayHabit.habit_id
                 }
-                return
             }
         }) ?? []
 
@@ -212,6 +208,7 @@ export async function appRoutes(app: FastifyInstance) {
         return summary;
     })
 
+    //login
     app.post("/signin", async(request, response) => {
         const createUserBody = z.object({
             email: z.string(),

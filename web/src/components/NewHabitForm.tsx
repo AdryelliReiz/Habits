@@ -50,7 +50,7 @@ export function NewHabitForm() {
                     weekDays
                 },
                 headers: {
-                    Authorization: `Bearer ${token}`
+                    "authorization": `Bearer ${token}`
                 }
             })
     
