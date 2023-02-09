@@ -25,7 +25,8 @@ export function SummaryTable() {
     const {token} = useContext(AuthenticateTokenContext)
 
     useEffect(() => {
-        if(token) {
+        if(token !== "") {
+            console.log(token)
             api.get("/summary", {
                 headers: {
                     Authorization: `Bearer ${token}`
