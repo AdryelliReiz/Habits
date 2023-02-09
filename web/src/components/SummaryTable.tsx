@@ -51,7 +51,7 @@ export function SummaryTable() {
                 ))}
             </div>
 
-            <div className="grid grid-rows-7 grid-flow-col gap-3">
+            <div className="w-full overflow-x-scroll grid grid-rows-7 grid-flow-col gap-3">
                 {summary.length > 0 && summaryDates.map((date) => {
                     const dayInSummary = summary.find(day => {
                         return dayjs(date).isSame(day.date, "day")

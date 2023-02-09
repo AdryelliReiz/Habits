@@ -48,11 +48,14 @@ export function NewHabitForm() {
                 data: {
                     title,
                     weekDays
-                },
+                }
+            }, 
+            {
                 headers: {
                     "Authorization": `Basic ${token}`
                 }
-            })
+            }
+            )
     
             setTitle("")
             setWeekDays([])

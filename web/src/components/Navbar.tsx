@@ -11,16 +11,18 @@ export function NavBar() {
         <div className="w-full h-16 fixed top-0 px-20 bg-background flex items-center justify-end">
             {isAuthenticated && user ? (
                 <Popover.Root>
-                    <Popover.Trigger className="p-4" />
-                    <img 
-                        className="w-10 h-10 rounded-full border-1 border-violet-800" 
-                        src={user.picture} 
-                        alt={user.name} 
-                    />
-                    <p className="ml-4 font-semibold leading-tight" >{user.name}</p>
+                    <Popover.Trigger className="p-4">
+                        <img 
+                            className="w-10 h-10 rounded-full border-1 border-violet-800" 
+                            src={user.picture} 
+                            alt={user.name} 
+                        />
+                        <p className="ml-4 font-semibold leading-tight" >{user.name}</p>
+                    </Popover.Trigger>
+                    
                 
                     <Popover.Portal>
-                        <Popover.Content className="w-full p-6 rounded-2xl bg-zinc-900" >
+                        <Popover.Content className="w-full p-4 rounded-2xl bg-zinc-900" >
                             <Popover.Arrow height={8} width={16} className="fill-zinc-900" />
                         
                             <button 

@@ -90,13 +90,17 @@ export async function appRoutes(app: FastifyInstance) {
             }
         })
 
-        const completedHabits = day?.dayHabits.map(dayHabit => {
-            for(var habit of possibleHabits) {
-                if(habit.id == dayHabit.habit_id) {
-                   return dayHabit.habit_id
+        let completedHabits = []
+
+        if(day?.dayHabits) {
+            for(var dayHabit of day.dayHabits) {
+                for(var habit of possibleHabits) {
+                    if(habit.id === dayHabit.habit_id) {
+                        completedHabits.push(habit.id)
+                    }
                 }
             }
-        }) ?? []
+        }
 
         return {
             possibleHabits,
