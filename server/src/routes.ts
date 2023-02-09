@@ -35,6 +35,8 @@ export async function appRoutes(app: FastifyInstance) {
 
         const today = dayjs().startOf("day").toDate()
 
+        console.log(request.user)
+
         await prisma.habit.create({
             data: {
                 title,

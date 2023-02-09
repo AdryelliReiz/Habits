@@ -35,26 +35,32 @@ export function NewHabitForm() {
     async function createNewHabit(event: FormEvent) {
         event.preventDefault()
 
-        if(!title || weekDays.length === 0) {
-            return
-        }
 
-        if(!token) {
-            return
-        }
-
-        await api.post("/habits", {
-            title,
-            weekDays,
-            headers: {
-                Authorization: `Bearer ${token}`
+        try {
+            if(!title || weekDays.length === 0) {
+                return
             }
-        })
+    
+            if(token !== "") {
+                return
+            }
+    
+            await api.post("/habits", {
+                title,
+                weekDays,
+                headers: {
+                    Authorization: `Bearer ${token}`
+                }
+            })
+    
+            setTitle("")
+            setWeekDays([])
+    
+            alert("Hábito criado com sucesso!")
+        } catch (error) {
+            console.log(error)
+        }
 
-        setTitle("")
-        setWeekDays([])
-
-        alert("Hábito criado com sucesso!")
     }
     return (
         <form onSubmit={createNewHabit}  className="w-full flex flex-col mt-6" >

@@ -18,6 +18,7 @@ export const AuthenticateTokenContextProvider = ({children}: ProviderProps) => {
   const { user, isAuthenticated } = useAuth0();
 
   async function registerUserAndGetToken() {
+    console.log(user)
     await api.post("/signin", {
       email: user?.email,
       username: user?.name,
