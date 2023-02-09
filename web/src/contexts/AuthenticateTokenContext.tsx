@@ -22,7 +22,7 @@ export const AuthenticateTokenContextProvider = ({children}: ProviderProps) => {
       email: user?.email,
       username: user?.name,
       picture: user?.picture
-    }).then(res => setToken(res.data))
+    }).then(res => setToken(res.data.token))
   }
 
   useEffect(() => {
