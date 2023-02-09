@@ -39,16 +39,16 @@ export function NewHabitForm() {
             if(!title || weekDays.length === 0) {
                 return
             }
-
-            console.log(token)
-    
-            if(token === "") {
+            
+            if(!token) {
                 return
             }
     
             await api.post("/habits", {
-                title,
-                weekDays,
+                body: {
+                    title,
+                    weekDays
+                },
                 headers: {
                     Authorization: `Bearer ${token}`
                 }
