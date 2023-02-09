@@ -45,12 +45,12 @@ export function NewHabitForm() {
             }
     
             await api.post("/habits", {
-                body: {
+                data: {
                     title,
                     weekDays
                 },
                 headers: {
-                    "authorization": `Bearer ${token}`
+                    "Authorization": `Bearer ${token}`
                 }
             })
     

@@ -42,9 +42,9 @@ export function HabitsList({date, onCompletedChanced}: HabitsList) {
             return
         }
 
-        await api.patch(`/habits/${habitId}/toggle`, {
+        await api.patch(`/habits/${habitId}/toggle`, {}, {
             headers: {
-                "authorization": `Bearer ${token}`
+                "Authorization": `Bearer ${token}`
             }
         })
 
