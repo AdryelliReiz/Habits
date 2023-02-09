@@ -1,7 +1,8 @@
 import * as Checkbox from "@radix-ui/react-checkbox"
 import dayjs from "dayjs"
 import { Check } from "phosphor-react"
-import { useEffect, useState } from "react"
+import { useContext, useEffect, useState } from "react"
+import { AuthenticateTokenContext } from "../contexts/AuthenticateTokenContext"
 import { api } from "../lib/axios"
 
 interface HabitsList {
@@ -21,18 +22,31 @@ interface HabitsInfo {
 export function HabitsList({date, onCompletedChanced}: HabitsList) {
     const [habitsInfo, setHabitsInfo] = useState<HabitsInfo>()
 
+    const {token} = useContext(AuthenticateTokenContext)
+
     useEffect(() => {
         api.get("/day", {
             params: {
                 date: date.toISOString(),
+            },
+            headers: {
+                Authorization: `Bearer ${token}`
             }
         }).then(response => {
             setHabitsInfo(response.data)
         })
-    }, [])
+    }, [token])
 
     async function handleToggleHabit(habitId: string) {
-        await api.patch(`/habits/${habitId}/toggle`)
+        if(!token) {
+            return
+        }
+
+        await api.patch(`/habits/${habitId}/toggle`, {
+            headers: {
+                Authorization: `Bearer ${token}`
+            }
+        })
 
         const isHabitAlreadyCompleted = habitsInfo!.completedHabits.includes(habitId)
 

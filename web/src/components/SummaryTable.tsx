@@ -1,5 +1,6 @@
 import dayjs from "dayjs";
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
+import { AuthenticateTokenContext } from "../contexts/AuthenticateTokenContext";
 import { api } from "../lib/axios";
 import { generateDatesFromYearBeginning } from "../utils/generate-dates-from-year-beginning.ts"
 import { HabitDay } from "./HabitDay"
@@ -21,11 +22,19 @@ type Summary = Array<{
 export function SummaryTable() {
     const [summary, setSummary] = useState<Summary>([])
 
+    const {token} = useContext(AuthenticateTokenContext)
+
     useEffect(() => {
-        api.get("/summary").then(response => {
-            setSummary(response.data)
-        })
-    }, [])
+        if(token) {
+            api.get("/summary", {
+                headers: {
+                    Authorization: `Bearer ${token}`
+                }
+            }).then(response => {
+                setSummary(response.data)
+            })
+        }
+    }, [token])
     
     return (
         <div className="w-full flex">

@@ -1,7 +1,8 @@
 import { Check } from "phosphor-react";
 import * as Checkbox from "@radix-ui/react-checkbox";
-import { FormEvent, useState } from "react";
+import { FormEvent, useContext, useState } from "react";
 import { api } from "../lib/axios";
+import { AuthenticateTokenContext } from "../contexts/AuthenticateTokenContext";
 
 const availableWeekDays = [
     "Domingo",
@@ -16,6 +17,8 @@ const availableWeekDays = [
 export function NewHabitForm() {
     const [title, setTitle] = useState("");
     const [weekDays, setWeekDays] = useState<Number[]>([])
+
+    const {token} = useContext(AuthenticateTokenContext)
 
     function handleToggleWeekDay(weekDay: Number) {
         if(weekDays.includes(weekDay)) {
@@ -36,9 +39,16 @@ export function NewHabitForm() {
             return
         }
 
+        if(!token) {
+            return
+        }
+
         await api.post("/habits", {
             title,
-            weekDays
+            weekDays,
+            headers: {
+                Authorization: `Bearer ${token}`
+            }
         })
 
         setTitle("")
