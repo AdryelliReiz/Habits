@@ -8,8 +8,8 @@ import { SummaryContextProvider } from './contexts/SummaryContext'
 ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
   <React.StrictMode>
     <Auth0Provider
-      domain="adry-dev.us.auth0.com"
-      clientId="T8l60b61VYXBIJvPNgYxpFj5vQywCs19"
+      domain={process.env.REACT_APP_AUTH0_CLIENT_DOMAIN || ""}
+      clientId={process.env.REACT_APP_AUTH0_CLIENT_ID || ""}
       authorizationParams={{
         redirect_uri: window.location.origin
       }}
