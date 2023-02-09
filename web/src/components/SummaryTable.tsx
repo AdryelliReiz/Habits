@@ -29,7 +29,7 @@ export function SummaryTable() {
             console.log(token)
             api.get("/summary", {
                 headers: {
-                    Authorization: `Bearer ${token}`
+                    "Authorization": `Basic ${token}`
                 }
             }).then(response => {
                 console.log(response.data)
