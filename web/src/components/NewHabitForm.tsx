@@ -42,7 +42,7 @@ export function NewHabitForm() {
 
             console.log(token)
     
-            if(token !== "") {
+            if(token === "") {
                 return
             }
     
