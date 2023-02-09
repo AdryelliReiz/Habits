@@ -32,6 +32,7 @@ export function SummaryTable() {
                     Authorization: `Bearer ${token}`
                 }
             }).then(response => {
+                console.log(response.data)
                 setSummary(response.data)
             })
         }

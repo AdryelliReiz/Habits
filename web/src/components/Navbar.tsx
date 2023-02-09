@@ -13,11 +13,11 @@ export function NavBar() {
                 <Popover.Root>
                     <Popover.Trigger className="p-4" />
                     <img 
-                        className="w-12 h-12 rounded-full border-1 border-violet-800" 
+                        className="w-10 h-10 rounded-full border-1 border-violet-800" 
                         src={user.picture} 
                         alt={user.name} 
                     />
-                    <p className="font-semibold leading-tight" >{user.name}</p>
+                    <p className="ml-4 font-semibold leading-tight" >{user.name}</p>
                 
                     <Popover.Portal>
                         <Popover.Content className="w-full p-6 rounded-2xl bg-zinc-900" >
